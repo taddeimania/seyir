@@ -41,7 +41,10 @@ target_include_directories(SeyirDSP PUBLIC Source PRIVATE ThirdParty/mutable)
 target_compile_definitions(SeyirDSP PRIVATE TEST)
 set_target_properties(SeyirDSP PROPERTIES POSITION_INDEPENDENT_CODE ON)
 if(MSVC)
-    target_compile_options(SeyirDSP PRIVATE /W0 /wd4244 /wd4305)
+    # The module code was written for GCC: msvc_compat.h supplies M_PI and
+    # drops GCC attributes, without touching the vendored files.
+    target_compile_options(SeyirDSP PRIVATE /W0 /utf-8
+        "/FI${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/msvc_compat.h")
 else()
     target_compile_options(SeyirDSP PRIVATE -w)
 endif()
@@ -84,6 +87,9 @@ set(SEYIR_PLUGIN_SOURCES
 
 target_sources(Seyir PRIVATE ${SEYIR_PLUGIN_SOURCES})
 target_include_directories(Seyir PRIVATE Source)
+if(MSVC)
+    target_compile_options(Seyir PRIVATE /utf-8)   # the mode names have non-ASCII letters
+endif()
 target_compile_definitions(Seyir PUBLIC
     JUCE_WEB_BROWSER=0
     JUCE_USE_CURL=0
@@ -110,6 +116,9 @@ if(SEYIR_BUILD_TOOLS)
     juce_add_console_app(SeyirSnapshot PRODUCT_NAME "SeyirSnapshot")
     target_sources(SeyirSnapshot PRIVATE Tools/Snapshot.cpp ${SEYIR_PLUGIN_SOURCES})
     target_include_directories(SeyirSnapshot PRIVATE Source)
+    if(MSVC)
+        target_compile_options(SeyirSnapshot PRIVATE /utf-8)
+    endif()
     target_compile_definitions(SeyirSnapshot PRIVATE
         JucePlugin_Name="Seyir"
         JUCE_MODAL_LOOPS_PERMITTED=1
