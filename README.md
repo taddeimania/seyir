@@ -6,10 +6,13 @@ moves through a mode: mostly by step, leaning on the strong notes, ending
 phrases on a resting note, and climbing away from the tonic over several
 phrases before coming back. That path is what *seyir* means in maqam music.
 
-It makes its own sound with Mutable Instruments' Plaits and Rings, so the
-microtones need no setup: load it on a MIDI track and press play.
+It makes its own sound, so the microtones need no setup: load it on a MIDI
+track and press play.
 
 ![Seyir's panel](docs/seyir.png)
+
+New to Seyir? The [Getting started guide](docs/Seyir-Getting-Started.pdf) (PDF) gets it
+playing in Live in a couple of minutes and shows you round the panel.
 
 ## What's on the panel
 
@@ -61,21 +64,21 @@ phrase ends; amber notes were replayed from the DEJA VU loop.
   **GRAVITY** pull of the strong notes. **ARC** how clearly phrases climb and
   return. **PHRASE** notes per phrase. **ORNAMENT** chance of a slide, a grace
   note from above, or a shake.
-- **DEJA VU** (the idea is from Marbles): how often a step is replayed from the
+- **DEJA VU**: how often a step is replayed from the
   loop instead of invented. All the way up locks it (LEDs turn red). Lock a
   phrase, then swap the upper jins to hear the same melody in another maqam.
   **NEW** forgets the loop. **STEP** and **LOOP** set the step length and the
   loop length.
 
-**VOICE** — the melody's sound. MODEL picks one of Plaits' engines (plucked
+**VOICE** — the melody's sound. MODEL picks one of 17 synth voices (plucked
 string, modal, analog, FM, six-op FM, formant, additive, wavetable, speech and
-more) or one of Rings' resonators (modal, sympathetic strings, inharmonic
+more) or one of four resonators (modal, sympathetic strings, inharmonic
 string, FM). A, B and C are the model's own three knobs and are named for
-it. DECAY is how long notes ring. COLOR is Plaits' low-pass gate, MOTION lets
-each note's envelope move B.
+it. DECAY is how long notes ring. COLOR is a low-pass gate and MOTION lets
+each note's envelope move B; both apply to the synth voices.
 
 **SHAPE** — GLIDE, ATTACK, SUSTAIN, a low-pass filter (TONE, RES), DRIVE,
-SPACE (Rings' reverb, on melody and drone) and LEVEL.
+SPACE (reverb, on melody and drone) and LEVEL.
 
 **DRONE** — the tonic with a pure fifth, fourth or octave. HOLD is a steady
 additive drone; PLUCK strikes strings in a tanpura's cycle, one per beat. It
@@ -101,10 +104,7 @@ and what it played to a WAV.
 The engine tests check the scales, the walker and the synth's tuning (within
 2 cents at 44.1, 48 and 96 kHz).
 
-## Credits and licence
+## Licence
 
-The sound engines are Émilie Gillet's Plaits and Rings from Mutable
-Instruments, under the MIT licence. See [THIRD_PARTY.md](THIRD_PARTY.md).
-Seyir isn't affiliated with Mutable Instruments.
-
-Seyir is released under the GNU AGPLv3. See [LICENSE](LICENSE).
+Seyir is released under the GNU AGPLv3. See [LICENSE](LICENSE). Third-party
+code and its licence are listed in [THIRD_PARTY.md](THIRD_PARTY.md).

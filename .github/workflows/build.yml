@@ -94,8 +94,8 @@ jobs:
         run: ctest --test-dir build -C Release --output-on-failure
 
       # Package the plugin ourselves so file permissions and the macOS code
-      # signature survive the download. Each archive also carries the README,
-      # the licence and the third-party notices.
+      # signature survive the download. Each archive also carries the getting
+      # started guide, the README, the licence and the third-party notices.
       - name: Package
         run: |
           version=$(sed -n 's/^project(Seyir VERSION \([0-9.]*\).*/\1/p' CMakeLists.txt)
@@ -105,7 +105,7 @@ jobs:
           stage="$RUNNER_TEMP/$name"
           mkdir -p "$stage"
           cp -R "$art/VST3/Seyir.vst3" "$stage/"
-          cp README.md LICENSE THIRD_PARTY.md "$stage/"
+          cp docs/Seyir-Getting-Started.pdf README.md LICENSE THIRD_PARTY.md "$stage/"
           case "$RUNNER_OS" in
             macOS)
               ditto -c -k --sequesterRsrc --keepParent "$stage" "$GITHUB_WORKSPACE/$name.zip"

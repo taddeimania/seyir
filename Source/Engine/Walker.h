@@ -4,7 +4,7 @@
 // leaning on the strong notes, ending phrases on a resting note, and over
 // several phrases climbing away from the tonic and coming back (the seyir).
 //
-// DEJA VU borrows the idea from Mutable Instruments' Marbles: every step is
+// DEJA VU: every step is
 // remembered in a loop, and the knob sets how often a step is replayed from
 // the loop instead of invented. All the way up, the loop is locked.
 #pragma once

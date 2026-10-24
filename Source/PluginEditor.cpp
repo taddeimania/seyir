@@ -129,7 +129,7 @@ SeyirPanel::SeyirPanel (SeyirProcessor& p) : proc (p)
              "Chance of an ornament on a note: a slide from the last note, a grace note flicked in "
              "from above, or a shake.");
     addKnob (dejavuKnob, ids::dejavu, "DEJA VU", { 146, 834, 110, 100 },
-             "From Marbles: how often a step replays from the loop instead of being invented. "
+             "How often a step replays from the loop instead of being invented. "
              "All the way up locks the loop. Try swapping the upper jins while it's locked.");
     addAndMakeVisible (loopLeds);
     loopLeds.setBounds (270, 846, 346, 52);
@@ -137,19 +137,18 @@ SeyirPanel::SeyirPanel (SeyirProcessor& p) : proc (p)
 
     // --- voice --------------------------------------------------------------------------
     addChoice (voiceChoice, ids::voice, "MODEL", { 660, 568, 372, 52 },
-               "Which Mutable Instruments model plays the melody: Plaits' synthesis engines or "
-               "Rings' resonators.");
+               "Which sound plays the melody: a synth voice or a resonator.");
     voiceChoice.fontH = 17.0f;
     voiceChoice.onOpen = [this]
     {
         juce::PopupMenu m;
         const int cur = proc.geti (ids::voice);
-        m.addSectionHeader ("PLAITS");
+        m.addSectionHeader ("SYNTH VOICES");
         for (int i = 0; i < numVoiceModels(); ++i)
         {
             const auto& v = voiceModels()[(size_t) i];
             if (i > 0 && v.kind != voiceModels()[(size_t) i - 1].kind)
-                m.addSectionHeader ("RINGS");
+                m.addSectionHeader ("RESONATORS");
             m.addItem (v.name, true, i == cur, [this, i] { proc.setParam (ids::voice, (float) i); });
         }
         m.showMenuAsync (juce::PopupMenu::Options().withTargetComponent (&voiceChoice));
@@ -160,9 +159,10 @@ SeyirPanel::SeyirPanel (SeyirProcessor& p) : proc (p)
     addKnob (decayKnob, ids::decay, "DECAY", { 664, 760, 112, 108 },
              "How long notes ring. Also the envelope's decay and release.");
     addKnob (colorKnob, ids::color, "COLOR", { 786, 760, 112, 108 },
-             "Plaits' low-pass gate: from a plucked, closing tone to an open, ringing one.");
+             "Low-pass gate: from a plucked, closing tone to an open, ringing one. Synth voices only.");
     addKnob (motionKnob, ids::motion, "MOTION", { 908, 760, 112, 108 },
-             "Lets each note's envelope move the B knob (Plaits), for timbres that open or close as they sound.");
+             "Lets each note's envelope move the second knob, for timbres that open or close as they sound. "
+             "Synth voices only.");
     motionKnob.bipolar = true;
 
     // --- shape --------------------------------------------------------------------------
@@ -173,7 +173,7 @@ SeyirPanel::SeyirPanel (SeyirProcessor& p) : proc (p)
     addKnob (toneKnob, ids::tone, "TONE", { 1378, 564, 98, 100 }, "Low-pass filter. All the way up is open.");
     addKnob (resKnob, ids::res, "RES", { 1072, 670, 98, 100 }, "Filter resonance.");
     addKnob (driveKnob, ids::drive, "DRIVE", { 1174, 670, 98, 100 }, "Soft saturation before the filter.");
-    addKnob (spaceKnob, ids::space, "SPACE", { 1276, 670, 98, 100 }, "Reverb, from Rings. Melody and drone both.");
+    addKnob (spaceKnob, ids::space, "SPACE", { 1276, 670, 98, 100 }, "Reverb, on the melody and the drone.");
     addKnob (levelKnob, ids::level, "LEVEL", { 1378, 670, 98, 100 }, "Melody volume.");
 
     // --- drone --------------------------------------------------------------------------
@@ -184,8 +184,7 @@ SeyirPanel::SeyirPanel (SeyirProcessor& p) : proc (p)
     addChoice (droneNotesChoice, ids::droneNotes, "NOTES", { 1186, 816, 124, 50 },
                "The tonic alone, or with a pure fifth, fourth or octave.");
     addChoice (droneStyleChoice, ids::droneStyle, "STYLE", { 1186, 874, 124, 50 },
-               "HOLD: a steady harmonic drone (Plaits' additive engine). PLUCK: strings struck in a "
-               "tanpura's cycle (Plaits' string engine), one per beat.");
+               "HOLD: a steady harmonic drone. PLUCK: strings struck in a tanpura's cycle, one per beat.");
     addKnob (droneLevelKnob, ids::droneLevel, "LEVEL", { 1318, 808, 80, 104 }, "Drone volume.");
     addKnob (droneToneKnob, ids::droneTone, "TONE", { 1400, 808, 80, 104 }, "Darker to brighter.");
 
@@ -385,10 +384,11 @@ void SeyirPanel::timerCallback()
         cKnob.caption = m.c;
         decayKnob.caption = m.decay;
         const bool plaits = m.kind == VoiceKind::Plaits;
-        aKnob.setTooltip (plaits ? "Plaits' HARMONICS knob for this engine." : "Rings' STRUCTURE knob: the resonator's "
-                                   "harmonic structure (for sympathetic strings, how the extra strings are tuned).");
-        bKnob.setTooltip (plaits ? "Plaits' TIMBRE knob for this engine." : "Rings' BRIGHTNESS knob.");
-        cKnob.setTooltip (plaits ? "Plaits' MORPH knob for this engine." : "Rings' POSITION knob: where the string "
+        aKnob.setTooltip (plaits ? "The voice's first timbre control. Its name and job change with the voice."
+                                 : "The resonator's harmonic structure (for sympathetic strings, how the extra "
+                                   "strings are tuned).");
+        bKnob.setTooltip (plaits ? "The voice's second timbre control." : "How bright the strike is.");
+        cKnob.setTooltip (plaits ? "The voice's third timbre control." : "Where the string "
                                    "or plate is struck.");
         colorKnob.setAlpha (m.usesColor ? 1.0f : 0.35f);
         motionKnob.setAlpha (plaits ? 1.0f : 0.35f);
@@ -446,11 +446,10 @@ void SeyirPanel::paint (juce::Graphics& g)
     drawText (g, "MODE", { 520.0f, 20.0f, 62.0f, 34.0f }, 13.0f, colours::ink, true, juce::Justification::centredRight);
 
     // Sections.
-    const auto& vm = voiceModels()[(size_t) juce::jlimit (0, numVoiceModels() - 1, proc.geti (ids::voice))];
     drawSection (g, kScaleBox, "SCALE");
     drawSection (g, kPathBox, "PATH");
     drawSection (g, kWalkBox, "WALK");
-    drawSection (g, kVoiceBox, vm.kind == VoiceKind::Plaits ? "VOICE  /  PLAITS" : "VOICE  /  RINGS");
+    drawSection (g, kVoiceBox, "VOICE");
     drawSection (g, kShapeBox, "SHAPE");
     drawSection (g, kDroneBox, "DRONE");
 
@@ -468,9 +467,6 @@ void SeyirPanel::paint (juce::Graphics& g)
     g.drawFittedText (blurb, kBlurb.toNearestInt(), juce::Justification::topLeft, 3, 1.0f);
 
     drawText (g, "DEJA VU LOOP", { 270.0f, 900.0f, 346.0f, 16.0f }, 11.0f, colours::inkDim, true);
-    drawText (g, "Sound engines: Mutable Instruments", { 660.0f, 884.0f, 372.0f, 16.0f }, 11.0f, colours::inkDim, false);
-    drawText (g, "Plaits and Rings by Emilie Gillet, MIT licence", { 660.0f, 902.0f, 372.0f, 16.0f }, 11.0f,
-              colours::inkDim, false);
 }
 
 // ===========================================================================
