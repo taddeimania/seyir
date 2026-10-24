@@ -4030,6 +4030,7 @@ const int16_t* const lookup_table_i16_table[] = {
 
 
 const int32_t* const lookup_table_i32_table[] = {
+  NULL,  // Seyir: an empty array is a GCC extension; MSVC rejects it. Unused.
 };
 
 const int8_t lut_lpc_excitation_pulse[] = {

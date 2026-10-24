@@ -8,8 +8,12 @@ voices and the SPACE reverb) and stmlib, which both use. The code is in
 `ThirdParty/mutable`, copied from https://github.com/pichenettes/eurorack
 (see `ThirdParty/mutable/UPSTREAM` for the exact commits).
 
-One change was made: `plaits/user_data.h` includes `<cstdio>` so it builds on
-a desktop. Seyir runs the code at 48 kHz, as on the modules, and resamples to
+Two small changes were made so it builds on desktop compilers:
+`plaits/user_data.h` includes `<cstdio>`, and the three empty, unused lookup
+tables in `plaits/resources.cc` and `rings/resources.cc` hold a single null
+entry (MSVC doesn't accept empty arrays). Each is marked with a `Seyir:`
+comment. On Windows, `ThirdParty/msvc_compat.h` is force-included to supply
+`M_PI` and drop GCC attributes. Seyir runs the code at 48 kHz, as on the modules, and resamples to
 the host's rate.
 
 Seyir isn't affiliated with or endorsed by Mutable Instruments.

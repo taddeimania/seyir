@@ -37,11 +37,13 @@ namespace rings {
 
 
 const int16_t* lookup_table_int16_table[] = {
+  NULL,  // Seyir: an empty array is a GCC extension; MSVC rejects it. Unused.
 };
 
 
 
 const uint32_t* lookup_table_uint32_table[] = {
+  NULL,  // Seyir: an empty array is a GCC extension; MSVC rejects it. Unused.
 };
 
 const float lut_sine[] = {
