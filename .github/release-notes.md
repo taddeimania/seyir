@@ -2,6 +2,10 @@ Seyir is a microtonal melody explorer for Ableton Live: pick a maqam, a raga or
 any Scala tuning and it improvises a melody in it over a drone, and plays it
 itself.
 
+## New in 0.1.1
+
+- The macOS build is signed and notarised by Apple, so your DAW loads it straight away, with no quarantine command first.
+
 ## Install
 
 Unzip and copy `Seyir.vst3` into your VST3 folder (macOS
